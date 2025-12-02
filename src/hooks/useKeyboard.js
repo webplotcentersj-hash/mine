@@ -15,6 +15,8 @@ const ACTIONS_KEYBOARD_MAP = {
   Digit7: 'design',
   KeyG: 'save',
   KeyP: 'createPlotCenter',
+  KeyH: 'toggleHammer',
+  KeyB: 'buildHouse',
   Escape: 'toggleInstructions'
 }
 
@@ -34,6 +36,8 @@ export const useKeyboard = () => {
     design: false,
     save: false,
     createPlotCenter: false,
+    toggleHammer: false,
+    buildHouse: false,
     toggleInstructions: false
   })
 

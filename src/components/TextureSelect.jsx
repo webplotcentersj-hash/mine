@@ -48,7 +48,7 @@ export const TextureSelector = () => {
       const [textureName] = selectedTexture
       setTexture(textureName)
     }
-  }, [dirt, grass, glass, wood, log])
+  }, [dirt, grass, glass, wood, log, square, design, setTexture])
 
   return (
     <div className='texture-selector'>
@@ -56,12 +56,15 @@ export const TextureSelector = () => {
         Object
           .entries(images)
           .map(([imgKey, img]) => {
+            const textureName = imgKey.replace('Img', '')
             return (
               <img
-                className={texture === imgKey.replace('Img', '') ? 'selected' : ''}
+                className={texture === textureName ? 'selected' : ''}
                 key={imgKey}
                 src={img}
                 alt={imgKey}
+                onClick={() => setTexture(textureName)}
+                style={{ cursor: 'pointer' }}
               />
             )
           })

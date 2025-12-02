@@ -298,3 +298,17 @@ body {
   background: rgba(0, 0, 0, 0.9);
   transform: scale(1.1);
 }
+
+.diamond-item {
+  background: rgba(0, 191, 255, 0.2) !important;
+  border-color: rgba(0, 191, 255, 0.5) !important;
+}
+
+.diamond-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

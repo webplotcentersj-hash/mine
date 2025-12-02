@@ -24,10 +24,12 @@ const loadPlotCenters = () => {
 
 export const useStore = create(set => ({
   texture: 'dirt',
+  tool: 'hand', // 'hand', 'hammer'
   cubes: loadWorld(),
   plotCenters: loadPlotCenters(),
   isDay: true,
   timeOfDay: 0, // 0-24 horas
+  diamonds: 0,
   inventory: {
     dirt: 999,
     grass: 999,
@@ -35,7 +37,8 @@ export const useStore = create(set => ({
     wood: 999,
     log: 999,
     square: 10,
-    design: 50
+    design: 50,
+    diamond: 0
   },
   addCube: (x, y, z) => {
     set(state => {
@@ -67,16 +70,24 @@ export const useStore = create(set => ({
       }
     })
   },
-  removeCube: (id) => {
+  removeCube: (id, useHammer = false) => {
     set(state => {
       const cube = state.cubes.find(c => c.id === id)
       const newCubes = state.cubes.filter(c => c.id !== id)
       
       if (cube) {
-        const newInventory = {
+        let newInventory = {
           ...state.inventory,
           [cube.texture]: (state.inventory[cube.texture] || 0) + 1
         }
+        
+        // Si se usa martillo, hay chance de obtener diamantes
+        if (useHammer && Math.random() < 0.1) { // 10% de chance
+          const diamondsFound = Math.floor(Math.random() * 3) + 1
+          newInventory.diamond = (newInventory.diamond || 0) + diamondsFound
+          set({ diamonds: (state.diamonds || 0) + diamondsFound })
+        }
+        
         localStorage.setItem(STORAGE_KEY, JSON.stringify(newCubes))
         localStorage.setItem('minecraft-inventory', JSON.stringify(newInventory))
         
@@ -85,6 +96,92 @@ export const useStore = create(set => ({
           inventory: newInventory
         }
       }
+      
+      return { cubes: newCubes }
+    })
+  },
+  setTool: (tool) => {
+    set(() => ({ tool }))
+  },
+  buildHouse: (x, y, z) => {
+    set(state => {
+      const houseBlocks = []
+      const size = 5
+      const height = 4
+      
+      // Paredes
+      for (let i = 0; i < size; i++) {
+        for (let j = 0; j < height; j++) {
+          // Pared frontal
+          houseBlocks.push({
+            id: nanoid(),
+            texture: 'wood',
+            pos: [x + i, y + j, z]
+          })
+          // Pared trasera
+          houseBlocks.push({
+            id: nanoid(),
+            texture: 'wood',
+            pos: [x + i, y + j, z + size - 1]
+          })
+          // Pared izquierda
+          if (i === 0 || i === size - 1) {
+            houseBlocks.push({
+              id: nanoid(),
+              texture: 'wood',
+              pos: [x + i, y + j, z + 1]
+            })
+            houseBlocks.push({
+              id: nanoid(),
+              texture: 'wood',
+              pos: [x + i, y + j, z + 2]
+            })
+            houseBlocks.push({
+              id: nanoid(),
+              texture: 'wood',
+              pos: [x + i, y + j, z + 3]
+            })
+          }
+        }
+      }
+      
+      // Techo
+      for (let i = -1; i <= size; i++) {
+        for (let k = -1; k <= size; k++) {
+          houseBlocks.push({
+            id: nanoid(),
+            texture: 'log',
+            pos: [x + i, y + height, z + k]
+          })
+        }
+      }
+      
+      // Ventanas (vidrio)
+      houseBlocks.push({
+        id: nanoid(),
+        texture: 'glass',
+        pos: [x + 2, y + 1, z]
+      })
+      houseBlocks.push({
+        id: nanoid(),
+        texture: 'glass',
+        pos: [x + 2, y + 2, z]
+      })
+      
+      // Puerta (madera)
+      houseBlocks.push({
+        id: nanoid(),
+        texture: 'wood',
+        pos: [x + Math.floor(size / 2), y, z]
+      })
+      houseBlocks.push({
+        id: nanoid(),
+        texture: 'wood',
+        pos: [x + Math.floor(size / 2), y + 1, z]
+      })
+      
+      const newCubes = [...state.cubes, ...houseBlocks]
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newCubes))
       
       return { cubes: newCubes }
     })
@@ -117,8 +214,10 @@ export const useStore = create(set => ({
           wood: 999,
           log: 999,
           square: 10,
-          design: 50
-        }
+          design: 50,
+          diamond: 0
+        },
+        diamonds: 0
       })
     }
   },

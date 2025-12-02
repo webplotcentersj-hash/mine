@@ -2,7 +2,6 @@ import { usePlane } from '@react-three/cannon'
 import { useStore } from '../hooks/useStore.js'
 import { groundTexture } from '../images/textures.js'
 import { useKeyboard } from '../hooks/useKeyboard.js'
-import { useEffect } from 'react'
 
 export function Ground () {
   const [ref] = usePlane(() => ({
@@ -10,8 +9,8 @@ export function Ground () {
     position: [0, -0.5, 0]
   }))
 
-  const [addCube, addPlotCenter] = useStore(state => [state.addCube, state.addPlotCenter])
-  const { createPlotCenter } = useKeyboard()
+  const [addCube, addPlotCenter, buildHouse] = useStore(state => [state.addCube, state.addPlotCenter, state.buildHouse])
+  const { createPlotCenter, buildHouse: buildHouseKey } = useKeyboard()
 
   groundTexture.repeat.set(100, 100)
 
@@ -22,6 +21,8 @@ export function Ground () {
 
     if (createPlotCenter) {
       addPlotCenter(x, 0, z)
+    } else if (buildHouseKey) {
+      buildHouse(x, y, z)
     } else {
       addCube(x, y, z)
     }

@@ -1,14 +1,17 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
 import { useKeyboard } from '../hooks/useKeyboard.js'
+import { useStore } from '../hooks/useStore.js'
 import * as THREE from 'three'
 
 export const Hands = () => {
   const { camera } = useThree()
   const leftHandRef = useRef()
   const rightHandRef = useRef()
+  const hammerRef = useRef()
   const groupRef = useRef()
   const { moveForward, moveBackward, moveLeft, moveRight, jump } = useKeyboard()
+  const tool = useStore(state => state.tool)
   
   const isMoving = moveForward || moveBackward || moveLeft || moveRight
 
@@ -48,6 +51,15 @@ export const Hands = () => {
 
     rightHandRef.current.position.y -= swingOffset + jumpOffset
     rightHandRef.current.rotation.x = -swingOffset * 2
+    
+    // Posicionar martillo si está activo
+    if (hammerRef.current && tool === 'hammer') {
+      hammerRef.current.position.copy(rightHandRef.current.position)
+      hammerRef.current.position.z -= 0.15
+      hammerRef.current.position.y += 0.05
+      hammerRef.current.rotation.copy(groupRef.current.rotation)
+      hammerRef.current.rotation.x += Math.PI / 4
+    }
   })
 
   return (
@@ -63,6 +75,22 @@ export const Hands = () => {
         <boxBufferGeometry args={[0.15, 0.25, 0.1]} />
         <meshStandardMaterial color="#ffdbac" />
       </mesh>
+      
+      {/* Martillo */}
+      {tool === 'hammer' && (
+        <group ref={hammerRef}>
+          {/* Mango del martillo */}
+          <mesh position={[0, 0, 0]}>
+            <cylinderBufferGeometry args={[0.02, 0.02, 0.3, 8]} />
+            <meshStandardMaterial color="#8B4513" />
+          </mesh>
+          {/* Cabeza del martillo */}
+          <mesh position={[0, 0.15, 0]}>
+            <boxBufferGeometry args={[0.08, 0.1, 0.08]} />
+            <meshStandardMaterial color="#C0C0C0" metalness={0.8} roughness={0.2} />
+          </mesh>
+        </group>
+      )}
     </group>
   )
 }

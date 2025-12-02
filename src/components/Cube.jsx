@@ -7,7 +7,7 @@ import { useFrame } from '@react-three/fiber'
 
 export const Cube = ({ id, position, texture }) => {
   const [isHovered, setIsHovered] = useState(false)
-  const [removeCube] = useStore(state => [state.removeCube])
+  const [removeCube, tool] = useStore(state => [state.removeCube, state.tool])
   const meshRef = useRef()
   const scaleRef = useRef(1)
 
@@ -61,8 +61,9 @@ export const Cube = ({ id, position, texture }) => {
         onClick={(e) => {
           e.stopPropagation()
 
-          if (e.altKey) {
-            removeCube(id)
+          const tool = useStore.getState().tool
+          if (e.altKey || tool === 'hammer') {
+            removeCube(id, tool === 'hammer')
           }
         }}
       >
