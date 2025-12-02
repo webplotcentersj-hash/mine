@@ -27,7 +27,13 @@ export const Cube = ({ id, position, texture }) => {
     scaleRef.current = 0
   }, [])
 
-  useFrame(() => {
+  const lastFrame = useRef(0)
+  useFrame((state, delta) => {
+    // Throttle animaciones para mejor rendimiento
+    lastFrame.current += delta
+    if (lastFrame.current < 0.05) return // Actualizar cada 50ms
+    lastFrame.current = 0
+
     if (meshRef.current && scaleRef.current < 1) {
       scaleRef.current = Math.min(1, scaleRef.current + 0.1)
       meshRef.current.scale.setScalar(scaleRef.current)

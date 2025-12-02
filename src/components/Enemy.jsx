@@ -19,13 +19,19 @@ export const Enemy = ({ id, position }) => {
     args: [0.5, 1, 0.5]
   }))
 
+  const lastUpdate = useRef(0)
   useFrame((state, delta) => {
     if (isDead || !meshRef.current) return
+
+    // Throttle updates para mejor rendimiento
+    lastUpdate.current += delta
+    if (lastUpdate.current < 0.1) return // Actualizar cada 100ms
+    lastUpdate.current = 0
 
     hitCooldown.current = Math.max(0, hitCooldown.current - delta)
 
     // Movimiento hacia el jugador
-    if (playerPos) {
+    if (playerPos && Array.isArray(playerPos) && playerPos.length === 3) {
       const direction = new Vector3()
         .subVectors(new Vector3(...playerPos), new Vector3(...position))
         .normalize()
@@ -34,11 +40,11 @@ export const Enemy = ({ id, position }) => {
       api.velocity.set(direction.x, 0, direction.z)
     }
 
-    // Animación de flotación
+    // Animación de flotación (menos frecuente)
     const time = state.clock.elapsedTime
     if (meshRef.current) {
-      meshRef.current.rotation.y = time * 0.5
-      meshRef.current.position.y = position[1] + Math.sin(time * 2) * 0.1
+      meshRef.current.rotation.y = time * 0.3
+      meshRef.current.position.y = position[1] + Math.sin(time * 1.5) * 0.1
     }
   })
 
