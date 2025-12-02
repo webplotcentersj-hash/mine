@@ -1,7 +1,7 @@
 import { useStore } from '../hooks/useStore.js'
 import * as images from '../images/images.js'
 import { useKeyboard } from '../hooks/useKeyboard.js'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 export const TextureSelector = () => {
   const [visible, setVisible] = useState(true)
@@ -29,6 +29,7 @@ export const TextureSelector = () => {
     }
   }, [texture])
 
+  const prevKeys = useRef({})
   useEffect(() => {
     const options = {
       dirt,
@@ -40,14 +41,20 @@ export const TextureSelector = () => {
       design
     }
 
+    // Solo cambiar si una tecla cambió de false a true (no mientras está presionada)
     const selectedTexture = Object
       .entries(options)
-      .find(([texture, isEnabled]) => isEnabled)
+      .find(([textureName, isEnabled]) => {
+        const wasEnabled = prevKeys.current[textureName] || false
+        return isEnabled && !wasEnabled
+      })
 
     if (selectedTexture) {
       const [textureName] = selectedTexture
       setTexture(textureName)
     }
+
+    prevKeys.current = options
   }, [dirt, grass, glass, wood, log, square, design, setTexture])
 
   return (

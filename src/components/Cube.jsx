@@ -4,9 +4,11 @@ import { useState, useRef, useEffect } from 'react'
 import * as textures from '../images/textures.js'
 import { PointLight } from 'three'
 import { useFrame } from '@react-three/fiber'
+// BlockBreakEffect se manejará visualmente con animación
 
 export const Cube = ({ id, position, texture }) => {
   const [isHovered, setIsHovered] = useState(false)
+  const [showBreakEffect, setShowBreakEffect] = useState(false)
   const [removeCube, tool] = useStore(state => [state.removeCube, state.tool])
   const meshRef = useRef()
   const scaleRef = useRef(1)
@@ -61,9 +63,14 @@ export const Cube = ({ id, position, texture }) => {
         onClick={(e) => {
           e.stopPropagation()
 
-          const tool = useStore.getState().tool
-          if (e.altKey || tool === 'hammer') {
-            removeCube(id, tool === 'hammer')
+          const currentTool = useStore.getState().tool
+          if (e.altKey || currentTool === 'hammer') {
+            // Mostrar efecto de romper
+            setShowBreakEffect(true)
+            setTimeout(() => {
+              removeCube(id, currentTool === 'hammer')
+              setShowBreakEffect(false)
+            }, 200)
           }
         }}
       >
@@ -85,6 +92,17 @@ export const Cube = ({ id, position, texture }) => {
           distance={10}
           decay={2}
         />
+      )}
+      {showBreakEffect && (
+        <mesh position={position}>
+          <boxBufferGeometry args={[1.1, 1.1, 1.1]} />
+          <meshStandardMaterial
+            color="#FF0000"
+            transparent
+            opacity={0.5}
+            wireframe
+          />
+        </mesh>
       )}
     </>
   )

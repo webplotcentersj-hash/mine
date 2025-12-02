@@ -312,3 +312,87 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+/* Story Modal */
+.story-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.95);
+  padding: 40px;
+  border-radius: 15px;
+  border: 3px solid rgba(255, 215, 0, 0.5);
+  z-index: 2000;
+  max-width: 600px;
+  color: white;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+.story-content h2 {
+  color: #FFD700;
+  margin-top: 0;
+  text-align: center;
+  font-size: 28px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.story-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.story-content button {
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: #FFD700;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.story-content button:hover {
+  background: #FFA500;
+  transform: scale(1.05);
+}
+
+/* Quest Tracker */
+.quest-tracker {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 15px 25px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  z-index: 150;
+  color: white;
+  min-width: 300px;
+  text-align: center;
+}
+
+.quest-title {
+  font-weight: bold;
+  font-size: 18px;
+  color: #FFD700;
+  margin-bottom: 5px;
+}
+
+.quest-description {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.quest-progress {
+  font-size: 12px;
+  color: #4CAF50;
+  font-weight: bold;
+}

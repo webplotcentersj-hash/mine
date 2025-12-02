@@ -27,9 +27,17 @@ export const useStore = create(set => ({
   tool: 'hand', // 'hand', 'hammer'
   cubes: loadWorld(),
   plotCenters: loadPlotCenters(),
+  enemies: [],
+  playerPosition: [0, 0, 0],
   isDay: true,
   timeOfDay: 0, // 0-24 horas
   diamonds: 0,
+  storyProgress: 0,
+  quests: [
+    { id: 1, title: 'Bienvenido', description: 'Construye tu primera casa', completed: false },
+    { id: 2, title: 'Recolector', description: 'Recolecta 10 diamantes', completed: false },
+    { id: 3, title: 'Guerrero', description: 'Derrota 5 enemigos', completed: false }
+  ],
   inventory: {
     dirt: 999,
     grass: 999,
@@ -183,7 +191,12 @@ export const useStore = create(set => ({
       const newCubes = [...state.cubes, ...houseBlocks]
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newCubes))
       
-      return { cubes: newCubes }
+      // Completar quest de construcción
+      const quests = state.quests.map(q => 
+        q.id === 1 ? { ...q, completed: true } : q
+      )
+      
+      return { cubes: newCubes, quests }
     })
   },
   setTexture: (texture) => {
@@ -245,5 +258,41 @@ export const useStore = create(set => ({
       localStorage.setItem(PLOT_CENTERS_KEY, JSON.stringify(newPlotCenters))
       return { plotCenters: newPlotCenters }
     })
+  },
+  setPlayerPosition: (pos) => {
+    set(() => ({ playerPosition: pos }))
+  },
+  spawnEnemy: (x, y, z) => {
+    set(state => ({
+      enemies: [...state.enemies, {
+        id: nanoid(),
+        pos: [x, y, z]
+      }]
+    }))
+  },
+  removeEnemy: (id) => {
+    set(state => ({
+      enemies: state.enemies.filter(e => e.id !== id),
+      storyProgress: state.storyProgress + 1
+    }))
+  },
+  addDiamonds: (amount) => {
+    set(state => {
+      const newDiamonds = (state.diamonds || 0) + amount
+      const newInventory = {
+        ...state.inventory,
+        diamond: (state.inventory.diamond || 0) + amount
+      }
+      // Verificar quest de diamantes
+      const quests = state.quests.map(q => 
+        q.id === 2 && newDiamonds >= 10 ? { ...q, completed: true } : q
+      )
+      return { diamonds: newDiamonds, inventory: newInventory, quests }
+    })
+  },
+  updateQuest: (questId, completed) => {
+    set(state => ({
+      quests: state.quests.map(q => q.id === questId ? { ...q, completed } : q)
+    }))
   }
 }))

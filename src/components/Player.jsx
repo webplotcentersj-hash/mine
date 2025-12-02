@@ -3,6 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef } from 'react'
 import { Vector3 } from 'three'
 import { useKeyboard } from '../hooks/useKeyboard.js'
+import { useStore } from '../hooks/useStore.js'
 
 const CHARACTER_SPEED = 4
 const CHARACTER_JUMP_FORCE = 4
@@ -23,12 +24,14 @@ export const Player = () => {
     position: [0, 0.5, 0]
   }))
 
+  const setPlayerPosition = useStore(state => state.setPlayerPosition)
   const pos = useRef([0, 0, 0])
   useEffect(() => {
     api.position.subscribe(p => {
       pos.current = p
+      setPlayerPosition(p)
     })
-  }, [api.position])
+  }, [api.position, setPlayerPosition])
 
   const vel = useRef([0, 0, 0])
   useEffect(() => {
