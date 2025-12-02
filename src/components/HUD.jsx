@@ -77,6 +77,7 @@ export const HUD = () => {
               <li><strong>Click</strong> - Colocar bloque</li>
               <li><strong>Alt + Click</strong> - Eliminar bloque</li>
               <li><strong>1-6</strong> - Seleccionar textura</li>
+              <li><strong>P + Click</strong> - Crear Plot Center</li>
               <li><strong>G</strong> - Guardar mundo</li>
               <li><strong>ESC</strong> - Mostrar/ocultar instrucciones</li>
             </ul>

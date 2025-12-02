@@ -13,6 +13,7 @@ const ACTIONS_KEYBOARD_MAP = {
   Digit5: 'log',
   Digit6: 'square',
   KeyG: 'save',
+  KeyP: 'createPlotCenter',
   Escape: 'toggleInstructions'
 }
 
@@ -30,6 +31,7 @@ export const useKeyboard = () => {
     log: false,
     square: false,
     save: false,
+    createPlotCenter: false,
     toggleInstructions: false
   })
 

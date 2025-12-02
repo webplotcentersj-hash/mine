@@ -8,6 +8,8 @@ import { Cubes } from './components/Cubes.jsx'
 import { TextureSelector } from './components/TextureSelect.jsx'
 import { Inventory } from './components/Inventory.jsx'
 import { HUD } from './components/HUD.jsx'
+import { Hands } from './components/Hands.jsx'
+import { PlotCenters } from './components/PlotCenter.jsx'
 import { useStore } from './hooks/useStore.js'
 import { useEffect } from 'react'
 
@@ -47,7 +49,9 @@ function App () {
           <Cubes />
           <Player />
           <Ground />
+          <PlotCenters />
         </Physics>
+        <Hands />
       </Canvas>
       <div className='pointer'>+</div>
       <TextureSelector />

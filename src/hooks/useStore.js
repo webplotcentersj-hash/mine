@@ -2,6 +2,7 @@ import { nanoid } from 'nanoid'
 import create from 'zustand'
 
 const STORAGE_KEY = 'minecraft-world'
+const PLOT_CENTERS_KEY = 'minecraft-plot-centers'
 
 const loadWorld = () => {
   try {
@@ -12,9 +13,19 @@ const loadWorld = () => {
   }
 }
 
+const loadPlotCenters = () => {
+  try {
+    const saved = localStorage.getItem(PLOT_CENTERS_KEY)
+    return saved ? JSON.parse(saved) : []
+  } catch {
+    return []
+  }
+}
+
 export const useStore = create(set => ({
   texture: 'dirt',
   cubes: loadWorld(),
+  plotCenters: loadPlotCenters(),
   isDay: true,
   timeOfDay: 0, // 0-24 horas
   inventory: {
@@ -116,5 +127,22 @@ export const useStore = create(set => ({
         set({ inventory: JSON.parse(saved) })
       }
     } catch {}
+  },
+  addPlotCenter: (x, y, z) => {
+    set(state => {
+      const newPlotCenters = [...state.plotCenters, {
+        id: nanoid(),
+        pos: [x, y, z]
+      }]
+      localStorage.setItem(PLOT_CENTERS_KEY, JSON.stringify(newPlotCenters))
+      return { plotCenters: newPlotCenters }
+    })
+  },
+  removePlotCenter: (id) => {
+    set(state => {
+      const newPlotCenters = state.plotCenters.filter(pc => pc.id !== id)
+      localStorage.setItem(PLOT_CENTERS_KEY, JSON.stringify(newPlotCenters))
+      return { plotCenters: newPlotCenters }
+    })
   }
 }))
