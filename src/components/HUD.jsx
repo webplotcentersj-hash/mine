@@ -1,5 +1,5 @@
 import { useStore } from '../hooks/useStore.js'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useKeyboard } from '../hooks/useKeyboard.js'
 
 export const HUD = () => {
@@ -30,18 +30,22 @@ export const HUD = () => {
     }
   }, [toggleInstructions])
 
+  const prevToggleHammer = useRef(false)
   useEffect(() => {
-    if (toggleHammer) {
+    if (toggleHammer && !prevToggleHammer.current) {
       setTool(tool === 'hammer' ? 'hand' : 'hammer')
     }
+    prevToggleHammer.current = toggleHammer
   }, [toggleHammer, tool, setTool])
 
+  const prevBuildHouseKey = useRef(false)
   useEffect(() => {
-    if (buildHouseKey) {
+    if (buildHouseKey && !prevBuildHouseKey.current) {
       // Construir casa en la posición del jugador (aproximada)
       buildHouse(0, 0, 0)
       alert('Casa construida! Usa B + Click para construir en otra posición')
     }
+    prevBuildHouseKey.current = buildHouseKey
   }, [buildHouseKey, buildHouse])
 
   // Sistema de día/noche automático
