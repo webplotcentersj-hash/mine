@@ -8,14 +8,15 @@ export const Inventory = () => {
     state.setTexture
   ])
 
-  const textureNames = ['dirt', 'grass', 'glass', 'wood', 'log', 'square']
+  const textureNames = ['dirt', 'grass', 'glass', 'wood', 'log', 'square', 'design']
   const textureLabels = {
     dirt: 'Tierra',
     grass: 'Pasto',
     glass: 'Vidrio',
     wood: 'Madera',
     log: 'Tronco',
-    square: 'Sol'
+    square: 'Sol',
+    design: 'Diseño Animado'
   }
 
   return (

@@ -34,7 +34,8 @@ export const useStore = create(set => ({
     glass: 999,
     wood: 999,
     log: 999,
-    square: 10
+    square: 10,
+    design: 50
   },
   addCube: (x, y, z) => {
     set(state => {
@@ -115,7 +116,8 @@ export const useStore = create(set => ({
           glass: 999,
           wood: 999,
           log: 999,
-          square: 10
+          square: 10,
+          design: 50
         }
       })
     }

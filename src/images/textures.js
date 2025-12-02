@@ -4,7 +4,8 @@ import {
   logImg,
   glassImg,
   woodImg,
-  squareImg
+  squareImg,
+  designImg
 } from './images.js'
 
 import { NearestFilter, RepeatWrapping, TextureLoader } from 'three'
@@ -15,6 +16,9 @@ const logTexture = new TextureLoader().load(logImg)
 const glassTexture = new TextureLoader().load(glassImg)
 const woodTexture = new TextureLoader().load(woodImg)
 const squareTexture = new TextureLoader().load(squareImg)
+
+// Textura para diseño (GIF se manejará como imagen estática inicialmente)
+const designTexture = new TextureLoader().load(designImg)
 
 const groundTexture = new TextureLoader().load(grassImg)
 
@@ -28,6 +32,7 @@ logTexture.magFilter = NearestFilter
 glassTexture.magFilter = NearestFilter
 woodTexture.magFilter = NearestFilter
 squareTexture.magFilter = NearestFilter
+if (designTexture) designTexture.magFilter = NearestFilter
 
 export {
   groundTexture,
@@ -36,5 +41,6 @@ export {
   logTexture,
   glassTexture,
   woodTexture,
-  squareTexture
+  squareTexture,
+  designTexture
 }

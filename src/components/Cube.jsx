@@ -18,6 +18,7 @@ export const Cube = ({ id, position, texture }) => {
 
   const activeTexture = textures[texture + 'Texture']
   const isSun = texture === 'square'
+  const isAnimated = texture === 'design'
 
   // Animación al aparecer
   useEffect(() => {
@@ -28,6 +29,11 @@ export const Cube = ({ id, position, texture }) => {
     if (meshRef.current && scaleRef.current < 1) {
       scaleRef.current = Math.min(1, scaleRef.current + 0.1)
       meshRef.current.scale.setScalar(scaleRef.current)
+    }
+    
+    // Actualizar textura animada
+    if (isAnimated && activeTexture && activeTexture.update) {
+      activeTexture.update()
     }
   })
 
@@ -63,9 +69,9 @@ export const Cube = ({ id, position, texture }) => {
         <boxBufferGeometry attach='geometry' />
         <meshStandardMaterial
           color={isHovered ? 'grey' : isSun ? '#FFD700' : 'white'}
-          transparent={!isSun}
-          emissive={isSun ? '#FFD700' : '#000000'}
-          emissiveIntensity={isSun ? 2 : 0}
+          transparent={!isSun && !isAnimated}
+          emissive={isSun ? '#FFD700' : isAnimated ? '#FFFFFF' : '#000000'}
+          emissiveIntensity={isSun ? 2 : isAnimated ? 0.5 : 0}
           map={activeTexture}
           attach='material'
         />
