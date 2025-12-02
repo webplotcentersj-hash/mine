@@ -1,12 +1,15 @@
 import { useStore } from '../hooks/useStore.js'
 import { useBox } from '@react-three/cannon'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import * as textures from '../images/textures.js'
 import { PointLight } from 'three'
+import { useFrame } from '@react-three/fiber'
 
 export const Cube = ({ id, position, texture }) => {
   const [isHovered, setIsHovered] = useState(false)
   const [removeCube] = useStore(state => [state.removeCube])
+  const meshRef = useRef()
+  const scaleRef = useRef(1)
 
   const [ref] = useBox(() => ({
     type: 'Static',
@@ -16,9 +19,31 @@ export const Cube = ({ id, position, texture }) => {
   const activeTexture = textures[texture + 'Texture']
   const isSun = texture === 'square'
 
+  // Animación al aparecer
+  useEffect(() => {
+    scaleRef.current = 0
+  }, [])
+
+  useFrame(() => {
+    if (meshRef.current && scaleRef.current < 1) {
+      scaleRef.current = Math.min(1, scaleRef.current + 0.1)
+      meshRef.current.scale.setScalar(scaleRef.current)
+    }
+  })
+
   return (
     <>
       <mesh
+        ref={(node) => {
+          meshRef.current = node
+          if (ref) {
+            if (typeof ref === 'function') {
+              ref(node)
+            } else {
+              ref.current = node
+            }
+          }
+        }}
         onPointerMove={(e) => {
           e.stopPropagation()
           setIsHovered(true)
@@ -27,7 +52,6 @@ export const Cube = ({ id, position, texture }) => {
           e.stopPropagation()
           setIsHovered(false)
         }}
-        ref={ref}
         onClick={(e) => {
           e.stopPropagation()
 

@@ -11,7 +11,9 @@ const ACTIONS_KEYBOARD_MAP = {
   Digit3: 'glass',
   Digit4: 'wood',
   Digit5: 'log',
-  Digit6: 'square'
+  Digit6: 'square',
+  KeyG: 'save',
+  Escape: 'toggleInstructions'
 }
 
 export const useKeyboard = () => {
@@ -26,7 +28,9 @@ export const useKeyboard = () => {
     glass: false,
     wood: false,
     log: false,
-    square: false
+    square: false,
+    save: false,
+    toggleInstructions: false
   })
 
   useEffect(() => {
