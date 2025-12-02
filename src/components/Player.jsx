@@ -2,20 +2,14 @@ import { useSphere } from '@react-three/cannon'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef } from 'react'
 import { Vector3 } from 'three'
-import { useKeyboard } from '../hooks/useKeyboard.js'
+import { useControls } from '../hooks/useControls.js'
 import { useStore } from '../hooks/useStore.js'
 
 const CHARACTER_SPEED = 4
 const CHARACTER_JUMP_FORCE = 4
 
 export const Player = () => {
-  const {
-    moveBackward,
-    moveForward,
-    moveLeft,
-    moveRight,
-    jump
-  } = useKeyboard()
+  const { movement, jump } = useControls()
 
   const { camera } = useThree()
   const [ref, api] = useSphere(() => ({
@@ -49,24 +43,13 @@ export const Player = () => {
       )
     )
 
-    const direction = new Vector3()
-
-    const frontVector = new Vector3(
+    const direction = new Vector3(
+      movement.right,
       0,
-      0,
-      (moveBackward ? 1 : 0) - (moveForward ? 1 : 0)
+      movement.forward
     )
-
-    const sideVector = new Vector3(
-      (moveLeft ? 1 : 0) - (moveRight ? 1 : 0),
-      0,
-      0
-    )
-
-    direction
-      .subVectors(frontVector, sideVector)
       .normalize()
-      .multiplyScalar(CHARACTER_SPEED) // walk: 2, run: 5
+      .multiplyScalar(CHARACTER_SPEED)
       .applyEuler(camera.rotation)
 
     api.velocity.set(

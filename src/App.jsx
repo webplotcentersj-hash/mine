@@ -12,7 +12,7 @@ import { Hands } from './components/Hands.jsx'
 import { PlotCenters } from './components/PlotCenter.jsx'
 import { Enemies } from './components/Enemy.jsx'
 import { Story } from './components/Story.jsx'
-import { MobileControls } from './components/MobileControls.jsx'
+import { MobileControlsV2 } from './components/MobileControlsV2.jsx'
 import { useStore } from './hooks/useStore.js'
 import { useEffect, useState } from 'react'
 
@@ -97,7 +97,7 @@ function App () {
       <Inventory />
       <HUD />
       <Story />
-      <MobileControls />
+      <MobileControlsV2 />
     </>
   )
 }

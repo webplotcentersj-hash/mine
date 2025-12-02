@@ -70,13 +70,26 @@ export const Cube = ({ id, position, texture }) => {
           e.stopPropagation()
 
           const currentTool = useStore.getState().tool
-          if (e.altKey || currentTool === 'hammer') {
-            // Mostrar efecto de romper
-            setShowBreakEffect(true)
-            setTimeout(() => {
-              removeCube(id, currentTool === 'hammer')
-              setShowBreakEffect(false)
-            }, 200)
+          const isMobile = window.innerWidth < 768 || 'ontouchstart' in window
+          
+          // En móvil, doble tap o herramienta martillo para romper
+          if (isMobile) {
+            if (currentTool === 'hammer') {
+              setShowBreakEffect(true)
+              setTimeout(() => {
+                removeCube(id, true)
+                setShowBreakEffect(false)
+              }, 200)
+            }
+          } else {
+            // Desktop: Alt + Click o martillo
+            if (e.altKey || currentTool === 'hammer') {
+              setShowBreakEffect(true)
+              setTimeout(() => {
+                removeCube(id, currentTool === 'hammer')
+                setShowBreakEffect(false)
+              }, 200)
+            }
           }
         }}
       >

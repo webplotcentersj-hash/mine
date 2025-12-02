@@ -25,6 +25,7 @@ const loadPlotCenters = () => {
 export const useStore = create(set => ({
   texture: 'dirt',
   tool: 'hand', // 'hand', 'hammer'
+  buildMode: 'cube', // 'cube', 'house', 'plot'
   cubes: loadWorld(),
   plotCenters: loadPlotCenters(),
   enemies: [],
@@ -201,6 +202,9 @@ export const useStore = create(set => ({
   },
   setTexture: (texture) => {
     set(() => ({ texture }))
+  },
+  setBuildMode: (mode) => {
+    set(() => ({ buildMode: mode }))
   },
   toggleDayNight: () => {
     set(state => ({ isDay: !state.isDay }))
