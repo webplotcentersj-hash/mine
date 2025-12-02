@@ -104,17 +104,12 @@ export const HUD = () => {
             <ul>
               <li><strong>WASD</strong> - Mover</li>
               <li><strong>Espacio</strong> - Saltar</li>
-              <li><strong>Click</strong> - Colocar bloque</li>
-              <li><strong>Alt + Click</strong> - Eliminar bloque</li>
-              <li><strong>1-7</strong> - Seleccionar textura</li>
-              <li><strong>Click</strong> - Colocar bloque</li>
-              <li><strong>Alt + Click</strong> - Eliminar bloque</li>
-              <li><strong>H</strong> - Cambiar herramienta (Mano/Martillo)</li>
-              <li><strong>🔨 Martillo</strong> - Romper bloques (10% chance de diamantes)</li>
-              <li><strong>B + Click</strong> - Construir casa</li>
-              <li><strong>P + Click</strong> - Crear Plot Center</li>
-              <li><strong>G</strong> - Guardar mundo</li>
-              <li><strong>ESC</strong> - Mostrar/ocultar instrucciones</li>
+              <li><strong>Click</strong> - Colocar / <strong>Alt+Click</strong> - Eliminar</li>
+              <li><strong>1-7</strong> - Texturas</li>
+              <li><strong>H</strong> - Martillo/Mano</li>
+              <li><strong>B+Click</strong> - Casa</li>
+              <li><strong>G</strong> - Guardar</li>
+              <li><strong>ESC</strong> - Cerrar</li>
             </ul>
             <button onClick={() => setShowInstructions(false)}>Cerrar</button>
           </div>
